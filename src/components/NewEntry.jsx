@@ -1,8 +1,11 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
 const NewEntry = () => {
+  const { category } = useParams()
+
   return (
-    <div>NewEntry</div>
+    <h2>New Entry in {category} category</h2>
   )
 }
 
