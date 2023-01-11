@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Navbar from "./Navbar"
 import CategorySelection from "./CategorySelection"
 import Home from "./Home"
@@ -13,8 +13,15 @@ const seedEntries = [
 ]
 
 const App = () => {
-  const [entries, setEntries] = useState(seedEntries)
+  const [entries, setEntries] = useState([])
   const nav = useNavigate()
+
+  // Only on mount
+  useEffect(async () => {
+    const res = await fetch('http://localhost:4001/entries')
+    const data = await res.json()
+    setEntries(data)
+  }, [])
 
   // HOC (higher-order component)
   const ShowEntryWrapper = () => {
