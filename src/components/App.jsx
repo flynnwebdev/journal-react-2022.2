@@ -1,38 +1,12 @@
-import React, { useEffect, useState, useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import Navbar from "./Navbar"
 import CategorySelection from "./CategorySelection"
 import Home from "./Home"
 import NewEntry from "./NewEntry"
 import { Routes, Route, useParams, useNavigate } from "react-router-dom"
 import ShowEntry from "./ShowEntry"
-
-// const seedEntries = [
-//   { category: "Food", content: "Pizza is awesome!" },
-//   { category: "Work", content: "Another day, another dollar" },
-//   { category: "Coding", content: "React is cool!" },
-// ]
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "addEntry":
-      return {
-        ...state,
-        entries: [...state.entries, action.newEntry],
-      }
-    case "setEntries":
-      return {
-        ...state,
-        entries: action.entries,
-      }
-    case "setCategories":
-      return {
-        ...state,
-        categories: action.categories,
-      }
-    default:
-      return state
-  }
-}
+import reducer from '../reducer'
+import JournalContext from "../context"
 
 const initialState = {
   entries: [],
@@ -40,8 +14,6 @@ const initialState = {
 }
 
 const App = () => {
-  // const [entries, setEntries] = useState([])
-  // const [categories, setCategories] = useState([])
   const [state, dispatch] = useReducer(reducer, initialState)
   const { entries, categories } = state
 
@@ -108,16 +80,16 @@ const App = () => {
   }
 
   return (
-    <>
+    <JournalContext.Provider value={{ state, dispatch }} >
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home entries={entries} />} />
-        <Route path="/category" element={<CategorySelection categories={categories} />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/category" element={<CategorySelection />} />
         <Route path="/entry/:id" element={<ShowEntryWrapper />} />
         <Route path="/entry/new/:category" element={<NewEntry addEntry={addEntry} />} />
         <Route path="*" element={<h4>Page not found!</h4>} />
       </Routes>
-    </>
+    </JournalContext.Provider>
   )
 }
 
